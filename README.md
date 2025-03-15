@@ -1,9 +1,8 @@
-# quizforkja
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
     <title>세로 모드 퀴즈</title>
     <style>
         body {
@@ -13,14 +12,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            width: 100vw;
+            height: 100dvh; /* iOS 최신 브라우저에서도 화면을 꽉 채우도록 */
             background-color: #000;
             position: relative;
+            touch-action: manipulation;
         }
         img {
             width: 100vw;
-            height: 100vh;
-            object-fit: cover;
+            height: 100dvh;
+            object-fit: cover; /* 화면을 꽉 채우도록 */
         }
         .error-message {
             display: none;
@@ -30,25 +31,27 @@
         }
         .answer-box {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
+            bottom: 8%;
+            right: 5%;
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 10px;
-            border-radius: 5px;
-            z-index: 10;
+            border-radius: 8px;
             display: flex;
-            gap: 5px;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
         .answer-box input {
-            padding: 5px;
-            width: 120px;
+            padding: 8px;
+            width: 130px;
+            font-size: 16px;
         }
         .answer-box button {
-            padding: 5px 10px;
+            padding: 8px 12px;
+            font-size: 16px;
             background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 3px;
+            border-radius: 5px;
             cursor: pointer;
         }
         .answer-box button:hover {
@@ -78,7 +81,6 @@
 
     <script>
         const image = document.getElementById('mainImage');
-        const errorMessage = document.getElementById('errorMessage');
         let currentQuestion = 0;
         let answerBox = null;
 
@@ -137,7 +139,7 @@
         });
 
         function showAnswerBox() {
-            if (answerBox) return; // 이미 입력창이 있으면 중복 생성 방지
+            if (answerBox) return;
 
             answerBox = document.createElement('div');
             answerBox.classList.add('answer-box');
@@ -164,12 +166,7 @@
             const userAnswer = document.getElementById('answerInput').value.trim();
             const correctAnswer = questions[currentQuestion - 1].answer;
 
-            if (userAnswer === correctAnswer) {
-                image.src = successImage;
-            } else {
-                image.src = failImage;
-            }
-
+            image.src = userAnswer === correctAnswer ? successImage : failImage;
             removeAnswerBox();
         }
 
